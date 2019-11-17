@@ -58,7 +58,7 @@ class OBF:
                 while ((output.expect[0][int(-1//self.Pace)]-P_trans)/(E_list[i]*E_list[i])>self.accuracy):
                     Time=Time*2
                     (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
-                if ((output.expect[0][int(-1//self.Pace)]-P_trans)/(E_list[i]*E_list[i])<(self.accuracy/100)):
+                if ((output.expect[0][int(-1//self.Pace)]-P_trans)/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
                     Time=Time//2
                 if Option[1]==0:
                     self.Result_out[2][i]=P_trans
