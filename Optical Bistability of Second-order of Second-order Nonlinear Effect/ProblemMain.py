@@ -55,10 +55,12 @@ class OBF:
                 Nb=int(Na//2);
                 ps.SetParamaters((self.g,[Na,Nb,0,0],self.Delta,E_list[i]))
                 (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
-                while ((output.expect[0][int(-1//self.Pace)]-P_trans)/(E_list[i]*E_list[i])>self.accuracy):
+                while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])>self.accuracy):
+                    #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time*2
                     (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
-                if ((output.expect[0][int(-1//self.Pace)]-P_trans)/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
+                if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
+                    #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2
                 if Option[1]==0:
                     self.Result_out[2][i]=P_trans
