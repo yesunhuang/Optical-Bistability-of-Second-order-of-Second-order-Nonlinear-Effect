@@ -28,6 +28,9 @@
     <Compile Include="ProblemSolver.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="HowToUse.md">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Optical Bistability of Second-order Nonlinear Effect.ipynb" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
