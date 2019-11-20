@@ -83,7 +83,7 @@ obf.PlotRelation([0.333,2],0.1,[3,0])
 #which is much more faster than the default one.
 ```
 ``` python
-obf.SavaData('Data1.dat')
+obf.SaveData('Data1.dat')
 ```
 ### Calculate `Output_rate` as function of 'P_in'
 ``` python
