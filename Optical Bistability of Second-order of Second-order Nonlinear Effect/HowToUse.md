@@ -32,21 +32,21 @@ Print out the calculation result under certain value E and plot the revolution c
 |N|int[Na,Nb,init_Na,init_Nb]|The max photons numbers of mode a and b, and also the initial value of photon numbers|
 |Time|float|Revolution time|
 
-##### `PlotRelation(E_range,E_step,Option)`
-Plot the *P_trans* or *Output_rate* as function of *P_in*
+##### `PlotRelation(E,g,Option)`
+Plot the $<a^{\dagger}a>$ and $<b^{\dagger}b>$ as function of $P_{in}$ or g
 
 |Paramater|Type|Description|
 |----|----|----|
-|E_range|float[start,end]|Range of amplitude of the electric field of the driving laser|
-|E_step|float|Step of `E_list`|
-|Option|int[solver,resultValue]|`solver=0(steadystate()) or 1(mesolve()) or 3(both)` `resultValue=0(P_trans) or 1(Output_rate)`|
+|E|float[]|Array of amplitude of the electric field of the driving laser|
+|g|float[]|Array of cavity constant|
+|Option|bool|`False(Default)`:Plot as function of $P_{in}$ `True`:Plot as function of g|
 
 #### `PlotResult(Option)`
 Plot the result stored in calculated by `PlotRelation()`. It will be called automatically by `PlotRelation()` or you can also use it manually to check the result.
 
 The paramater `Option` is the same as the above one.
 
-#### `SaveData(name)`
+#### `SaveData(name,E,g)`
 Store the data calculated by `PlotRelation()` in a specific file.
 
 |Paramater|Type|Description|
@@ -72,22 +72,20 @@ obf=OBF()
 obf.ChangeSetting((0.333,[0.8,1.6],0.001,0.0001))
 #Do not use this method if you wanna use default setting
 ```
-### Calculate the revolution of specific 'E'
-``` python
-obf.PlotRevolution(0.106,[8,4,2,1],10)
+
+### Calculate E-g relation and save it
+```python
+E=np.linspace(0.106,2,20)
 ```
-### Calculate `P_trans` as function of 'P_in' and save it
-``` python
-obf.PlotRelation([0.333,2],0.1,[3,0])
-#Sincerely recommend using the advanced calculator 
-#which is much more faster than the default one.
+```python
+g=[0,0.4,0.5,1]
 ```
 ``` python
-obf.SaveData('Data1.dat')
+obf.PlotRelation(E,g)
 ```
-### Calculate `Output_rate` as function of 'P_in'
 ``` python
-obf.PlotRelation([0.333,2],0.1,[3,1])
+obf.SaveData('Data1.dat',E,g)
 ```
+
 
 

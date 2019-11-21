@@ -34,7 +34,7 @@ class OBF:
     def PlotRelation(self,E,g,Option=False):
         "The main function"
         E_list=E;g_list=g;
-        self.Result_out=np.zeros([size(g_list),np.size(E_list)])
+        self.Result_out=np.zeros([size(g_list),np.size(E_list),2])
         ps=ProblemSolver((self.g,[6,3,1,1],self.Delta,0.333))
 
         for j in range(0,np.size(g_list)):
@@ -51,24 +51,30 @@ class OBF:
                 if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2
-                self.Result_out[j][i]=P_trans
+                self.Result_out[j][i][0]=P_trans
+                self.Result_out[j][i][1]=output.expect[1][-1]
 
         self.PlotResult(Option,E,g)
 
 
     def PlotResult(self,Option,E,g):
         "Plot the result"
-        fig, axes = plt.subplots(1, 1, figsize=(8,6))
-        axes.set_xlim(E[0]*E[0],E[-1]*E[-1]);
+        fig, axes = plt.subplots(1, 2, figsize=(16,8))
         if (not Option):
-            axes.set_xlabel('P_in(E*E)')
+            axes[0].set_xlim(E[0]*E[0],E[-1]*E[-1]);axes[1].set_xlim(E[0]*E[0],E[-1]*E[-1])
+            axes[0].set_xlabel(r'$P_{in}(E^2)$');axes[1].set_xlabel(r'$P_{in}(E^2)$')
             for j in range(0,np.size(g)):
-                axes.plot(E*E,self.Result_out[j],label='g='+str(round(g[j],2)))
+                axes[0].plot(E*E,self.Result_out[j,...,0],label='g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out[j,...,1],label='g='+str(round(g[j],2)))
         else:
-            axes.plot(g,self.Result_out[...,0],label='E^2='+str(round(E[0]*E[0],2)))
-            axes.set_xlabel('g')
-        axes.legend(loc=0);
-        axes.set_ylabel('P_trans')
+            axes[0].set_xlim(g[0]*g[0],g[-1]*g[-1]);axes[1].set_xlim(g[0]*g[0],g[-1]*g[-1]);
+            for j in range(0,np.size(E)):
+                axes[0].plot(g,self.Result_out[...,j,0],label=r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[1].plot(g,self.Result_out[...,j,1],label=r"$E^2= $"+str(round(E[0]*E[0],2)))
+            axes[0].set_xlabel('g');axes[1].set_xlabel('g')
+        axes[0].legend(loc=0); axes[1].legend(loc=0);
+        axes[0].set_ylabel(r'$<a^{\dagger}a>$')
+        axes[1].set_ylabel(r'$<b^{\dagger}b>$')
         plt.show()
 
     def SaveData(self,name,E,g):
@@ -77,7 +83,9 @@ class OBF:
         for j in range(0,size(g)):
             data.write(str(g[j])+'\n')
             for i in range(0,size(E)):
-                data.write(str(E[i])+' '+str(self.Result_out[j][i]))
+                data.write(str(E[i])+' ')
+                data.write(str(self.Result_out[j][i][0])+' ')
+                data.write(str(self.Result_out[j][i][1]))
                 data.write('\n')
             data.write('------------------------------------------------\n')
         data.close()
