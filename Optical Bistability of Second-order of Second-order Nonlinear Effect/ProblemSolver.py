@@ -1,5 +1,6 @@
 from qutip import *
 from scipy import *
+from scipy import optimize
 import numpy as np
 
 
@@ -52,6 +53,20 @@ class ProblemSolver:
             P_in=self.E*self.E
         Output_rate=P_trans/P_in
         return(output,P_trans,Output_rate)
+
+    def MeanFeildCalculator(self):
+        "Use the mean-feild theory to calculate"
+        N_a=optimize.fsolve(self.MeanFeildF,math.pow(self.E,2))
+        N_b=math.pow(self.g,2)*math.pow(N_a,2)/(math.pow(self.Delta[1],2)+2)
+        return (N_a,N_b)
+
+    def MeanFeildF(self,N_a):
+        F=(4*math.pow(self.g,4)/(math.pow(self.Delta[1],2)+2))*math.pow(N_a,3)\
+        +((4*math.pow(self.g,2)*(2-self.Delta[0]*self.Delta[1]))/(math.pow(self.Delta[1],2)+2))*math.pow(N_a,2)\
+        +(math.pow(self.Delta[0],2)+1)*N_a-math.pow(self.E,2)
+        return F
+
+
 
 #from ProblemSolver import *
 #Paramaters= (0.333, [10,10,2,1], [0.8, 1.6], 0.106)

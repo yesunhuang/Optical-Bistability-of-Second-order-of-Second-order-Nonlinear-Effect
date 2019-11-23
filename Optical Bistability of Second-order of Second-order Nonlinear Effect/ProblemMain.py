@@ -35,6 +35,7 @@ class OBF:
         "The main function"
         E_list=E;g_list=g;
         self.Result_out=np.zeros([size(g_list),np.size(E_list),2])
+        self.Result_out_m=np.zeros([size(g_list),np.size(E_list),2])
         ps=ProblemSolver((self.g,[6,3,1,1],self.Delta,0.333))
 
         for j in range(0,np.size(g_list)):
@@ -53,7 +54,7 @@ class OBF:
                     Time=Time//2
                 self.Result_out[j][i][0]=P_trans
                 self.Result_out[j][i][1]=output.expect[1][-1]
-
+                (self.Result_out_m[j][i][0],self.Result_out_m[j][i][1])=ps.MeanFeildCalculator();
         self.PlotResult(Option,E,g)
 
 
@@ -64,13 +65,17 @@ class OBF:
             axes[0].set_xlim(E[0]*E[0],E[-1]*E[-1]);axes[1].set_xlim(E[0]*E[0],E[-1]*E[-1])
             axes[0].set_xlabel(r'$P_{in}(E^2)$');axes[1].set_xlabel(r'$P_{in}(E^2)$')
             for j in range(0,np.size(g)):
-                axes[0].plot(E*E,self.Result_out[j,...,0],label='g='+str(round(g[j],2)))
-                axes[1].plot(E*E,self.Result_out[j,...,1],label='g='+str(round(g[j],2)))
+                axes[0].plot(E*E,self.Result_out[j,...,0],linestyle='-',label='Q:g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out[j,...,1],linestyle='-',label='Q:g='+str(round(g[j],2)))
+                axes[0].plot(E*E,self.Result_out_m[j,...,0],linestyle='--',label='M:g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out_m[j,...,1],linestyle='--',label='M:g='+str(round(g[j],2)))
         else:
             axes[0].set_xlim(g[0]*g[0],g[-1]*g[-1]);axes[1].set_xlim(g[0]*g[0],g[-1]*g[-1]);
             for j in range(0,np.size(E)):
-                axes[0].plot(g,self.Result_out[...,j,0],label=r"$E^2= $"+str(round(E[0]*E[0],2)))
-                axes[1].plot(g,self.Result_out[...,j,1],label=r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[0].plot(g,self.Result_out[...,j,0],linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[1].plot(g,self.Result_out[...,j,1],linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[0].plot(g,self.Result_out_m[...,j,0],linestyle='--',label='M:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[1].plot(g,self.Result_out_m[...,j,1],linestyle='--',label='M:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
             axes[0].set_xlabel('g');axes[1].set_xlabel('g')
         axes[0].legend(loc=0); axes[1].legend(loc=0);
         axes[0].set_ylabel(r'$<a^{\dagger}a>$')
