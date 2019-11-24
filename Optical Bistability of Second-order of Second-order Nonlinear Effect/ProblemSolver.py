@@ -46,18 +46,19 @@ class ProblemSolver:
         options=Options()
         options.atol=atol
         options.rtol=rtol
-        output=mesolve(self.H,self.psi0,tlist,self.c_ops,[self.a.dag()*self.a,self.b.dag()*self.b],options=options)
+        Expect=[self.a.dag()*self.a,self.b.dag()*self.b,\
+            self.a.dag()*self.a.dag()*self.a*self.a,self.b.dag()*self.b.dag()*self.b*self.b]
+        output=mesolve(self.H,self.psi0,tlist,self.c_ops,Expect,options=options)
         P_trans=output.expect[0][-1]
-        if self.E>0:
-            P_in=self.E*self.E
-        Output_rate=P_trans/P_in
-        return(output,P_trans,Output_rate)
+        Correlation=[output.expect[2][-1]/math.pow(P_trans,2),\
+                     output.expect[3][-1]/math.pow(output.expect[1][-1],2)]
+        return(output,P_trans,Correlation)
 
 #from ProblemSolver import *
 #Paramaters= (0.333, [10,10,2,1], [0.8, 1.6], 0.106)
 #ps=ProblemSolver(Paramaters)
 #(a,b,c)=ps.DefaultCalculator()
-#(a1,b1,c1)=ps.AdvanceCalculator(1e-8,1e-6,3,0.001)
+#(a1,b1,c1)=ps.AdvanceCalculator(1e-8,1e-6,10,0.001)
 
 
 
