@@ -65,17 +65,18 @@ class OBF:
             axes[0].set_xlim(E[0]*E[0],E[-1]*E[-1]);axes[1].set_xlim(E[0]*E[0],E[-1]*E[-1])
             axes[0].set_xlabel(r'$P_{in}(E^2)$');axes[1].set_xlabel(r'$P_{in}(E^2)$')
             for j in range(0,np.size(g)):
-                axes[0].plot(E*E,self.Result_out[j,...,0],linestyle='-',label='Q:g='+str(round(g[j],2)))
-                axes[1].plot(E*E,self.Result_out[j,...,1],linestyle='-',label='Q:g='+str(round(g[j],2)))
-                axes[0].plot(E*E,self.Result_out_m[j,...,0],linestyle='--',label='M:g='+str(round(g[j],2)))
-                axes[1].plot(E*E,self.Result_out_m[j,...,1],linestyle='--',label='M:g='+str(round(g[j],2)))
+                cor=self.randomcolor()
+                axes[0].plot(E*E,self.Result_out[j,...,0],color=cor,linestyle='-',label='Q:g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out[j,...,1],color=cor,linestyle='-',label='Q:g='+str(round(g[j],2)))
+                axes[0].plot(E*E,self.Result_out_m[j,...,0],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out_m[j,...,1],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
         else:
             axes[0].set_xlim(g[0]*g[0],g[-1]*g[-1]);axes[1].set_xlim(g[0]*g[0],g[-1]*g[-1]);
             for j in range(0,np.size(E)):
-                axes[0].plot(g,self.Result_out[...,j,0],linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
-                axes[1].plot(g,self.Result_out[...,j,1],linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
-                axes[0].plot(g,self.Result_out_m[...,j,0],linestyle='--',label='M:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
-                axes[1].plot(g,self.Result_out_m[...,j,1],linestyle='--',label='M:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[0].plot(g,self.Result_out[...,j,0],color=cor,linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[1].plot(g,self.Result_out[...,j,1],color=cor,linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[0].plot(g,self.Result_out_m[...,j,0],color=cor,linestyle='--',label='M:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[1].plot(g,self.Result_out_m[...,j,1],color=cor,linestyle='--',label='M:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
             axes[0].set_xlabel('g');axes[1].set_xlabel('g')
         axes[0].legend(loc=0); axes[1].legend(loc=0);
         axes[0].set_ylabel(r'$<a^{\dagger}a>$')
@@ -95,6 +96,13 @@ class OBF:
             data.write('------------------------------------------------\n')
         data.close()
 
+    def randomcolor(self):
+        "get random color"
+        colorArr = ['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+        color = ""
+        for i in range(6):
+            color += colorArr[np.random.randint(0,14)]
+        return "#"+color
 
           
             
