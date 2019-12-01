@@ -20,16 +20,13 @@ class OBF:
         "Plot a simple revolution"
         solver=ProblemSolver((self.g,N,self.Delta,E))
         (output,P_trans,Output_rate)=solver.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
-        print(output.states)
-        (state,P_trans2,Output_rate2)=solver.DefaultCalculator()
-        print('DefalutCalculate:',P_trans2,' AdvanceCalculator:',P_trans)
         tlistN=Time//self.Pace
         tlist=np.linspace(0,Time,tlistN)
-        n_a = output.expect[0];n_b = output.expect[1]
+        n_a = output.expect[2];n_b = output.expect[3]
         fig, axes = plt.subplots(1, 1, figsize=(8,6))
         axes.plot(tlist, n_a, label="mode a");axes.plot(tlist, n_b, label="mode b")
         axes.set_xlim(0, Time);axes.legend(loc=0)
-        axes.set_xlabel('Time');axes.set_ylabel('Photons Numbers')
+        axes.set_xlabel('Time');axes.set_ylabel('Correlation')
         plt.show()
 
     def PlotRelation(self,E,g,Option=False):
@@ -44,16 +41,19 @@ class OBF:
                 Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),4));
                 Nb=int(Na//2);
                 ps.SetParamaters((g_list[j],[Na,Nb,0,0],self.Delta,E_list[i]))
-                (output,P_trans,Correlation)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
+                (output,P_trans,Co1,Co2)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
+                print(Co1,Co2)
                 while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])>self.accuracy):
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time*2
-                    (output,P_trans,Correlation)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
+                    (output,P_trans,Co1,Co2)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
                 if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2
-                self.Result_out[j][i][0]=Correlation[0]
-                self.Result_out[j][i][1]=Correlation[1]
+                #print(Time);
+                #print(Na,Nb);
+                self.Result_out[j][i][0]=Co1
+                self.Result_out[j][i][1]=Co2
         self.PlotResult(Option,E,g)
 
 
@@ -78,15 +78,17 @@ class OBF:
         axes[1].set_ylabel('Correlation '+r'$g_{2}$')
         plt.show()
 
-    def SaveData(self,name):
+    def SaveData(self,name,E,g):
         "Save to file"
         data = open(name,'a')
-        for i in range(0,size(self.Result_out)//3):
-            data.write(str(self.Result_out[0][i])+' ')
-            data.write(str(self.Result_out[1][i])+' ')
-            data.write(str(self.Result_out[2][i])+' ')
-            data.write('\n')
-        data.write('------------------------------------------------\n')
+        for j in range(0,size(g)):
+            data.write(str(g[j])+'\n')
+            for i in range(0,size(E)):
+                data.write(str(E[i])+' ')
+                data.write(str(self.Result_out[j][i][0])+' ')
+                data.write(str(self.Result_out[j][i][1]))
+                data.write('\n')
+            data.write('------------------------------------------------\n')
         data.close()
 
     def randomcolor(self):

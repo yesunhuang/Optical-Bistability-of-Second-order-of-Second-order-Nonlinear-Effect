@@ -50,9 +50,9 @@ class ProblemSolver:
             self.a.dag()*self.a.dag()*self.a*self.a,self.b.dag()*self.b.dag()*self.b*self.b]
         output=mesolve(self.H,self.psi0,tlist,self.c_ops,Expect,options=options)
         P_trans=output.expect[0][-1]
-        Correlation=[output.expect[2][-1]/math.pow(P_trans,2),\
-                     output.expect[3][-1]/math.pow(output.expect[1][-1],2)]
-        return(output,P_trans,Correlation)
+        co1=output.expect[2][-1]/math.pow(P_trans,2)
+        co2=output.expect[3][-1]/math.pow(output.expect[1][-1],2)
+        return(output,P_trans,co1,co2)
 
 #from ProblemSolver import *
 #Paramaters= (0.333, [10,10,2,1], [0.8, 1.6], 0.106)
