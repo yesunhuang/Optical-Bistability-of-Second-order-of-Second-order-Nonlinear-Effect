@@ -11,8 +11,8 @@ class OBF:
         self.Delta=np.asarray([0.8, 1.6])
         self.accuracy=0.0001
         self.Pace=0.001
-        self.rtol=1e-6
-        self.atol=1e-8
+        self.rtol=1e-10
+        self.atol=1e-13
     def ChangeSetting(self,Paramaters):
         "Change setting"
         (self.g,self.Delta,self.Pace,self.accuracy)=Paramaters
@@ -38,7 +38,7 @@ class OBF:
         for j in range(0,np.size(g_list)):
              Time=5
              for i in range(0,np.size(E_list)):
-                Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),4));
+                Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),8));
                 Nb=int(Na//2);
                 ps.SetParamaters((g_list[j],[Na,Nb,0,0],self.Delta,E_list[i]))
                 (output,P_trans,Co1,Co2)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
