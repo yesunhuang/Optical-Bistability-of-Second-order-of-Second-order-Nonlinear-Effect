@@ -9,7 +9,7 @@ class OBF:
         "Initial the setting"
         self.g=0.333
         self.Delta=np.asarray([0.8, 1.6])
-        self.accuracy=0.0001
+        self.accuracy=1e-5
         self.Pace=0.001
         self.rtol=1e-10
         self.atol=1e-13
@@ -38,11 +38,10 @@ class OBF:
         for j in range(0,np.size(g_list)):
              Time=5
              for i in range(0,np.size(E_list)):
-                Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),8));
+                Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),10));
                 Nb=int(Na//2);
                 ps.SetParamaters((g_list[j],[Na,Nb,0,0],self.Delta,E_list[i]))
                 (output,P_trans,Co1,Co2)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
-                print(Co1,Co2)
                 while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])>self.accuracy):
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time*2
@@ -52,6 +51,7 @@ class OBF:
                     Time=Time//2
                 #print(Time);
                 #print(Na,Nb);
+                print(Co1,Co2)
                 self.Result_out[j][i][0]=Co1
                 self.Result_out[j][i][1]=Co2
         self.PlotResult(Option,E,g)
