@@ -30,24 +30,16 @@ class ProblemSolver:
         self.c_ops.append(sqrt(2)*self.a)
         self.c_ops.append(sqrt(4)*self.b)
 
-    def DefaultCalculator(self):
-        "Use the steadystate function to calculate"
-        self.rho_ss=steadystate(self.H,self.c_ops)
-        P_trans=expect(self.a.dag()*self.a,self.rho_ss)
-        if self.E>0:
-            P_in=self.E*self.E
-        Output_rate=P_trans/P_in
 
-        return (self.rho_ss,P_trans,Output_rate)
-
-    def AdvanceCalculator(self,rtol,atol,steadytime,pace):
+    def AdvanceCalculator(self,rtol,atol,ntraj,steadytime,pace):
         "Use the mesolve function to calculate"
         tlistN=steadytime//pace
         tlist=np.linspace(0,steadytime,tlistN)
         options=Options()
         options.atol=atol
         options.rtol=rtol
-        output=mesolve(self.H,self.psi0,tlist,self.c_ops,[self.a.dag()*self.a,self.b.dag()*self.b],options=options)
+        options.ntraj=ntraj
+        output=mcsolve(self.H,self.psi0,tlist,self.c_ops,[self.a.dag()*self.a,self.b.dag()*self.b],options=options)
         P_trans=output.expect[0][-1]
         if self.E>0:
             P_in=self.E*self.E
