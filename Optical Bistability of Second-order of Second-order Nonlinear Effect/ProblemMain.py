@@ -43,7 +43,7 @@ class OBF:
                         Time=Time*2;
                     print(ntraj,Time);
                     (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,ntraj,Time,self.Pace)
-                if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
+                if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(P_trans)<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2;ntraj=ntraj//2
                 self.Result_out[j][i][0]=P_trans
