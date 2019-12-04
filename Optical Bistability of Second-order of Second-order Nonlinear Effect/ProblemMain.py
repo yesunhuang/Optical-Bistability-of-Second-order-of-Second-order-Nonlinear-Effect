@@ -9,10 +9,10 @@ class OBF:
         "Initial the setting"
         self.g=0.333
         self.Delta=np.asarray([0.8, 1.6])
-        self.accuracy=0.0001
+        self.accuracy=0.01
         self.Pace=0.001
-        self.rtol=1e-6
-        self.atol=1e-8
+        self.rtol=1e-10
+        self.atol=1e-13
         self.ntraj=500
     def ChangeSetting(self,Paramaters):
         "Change setting"
@@ -27,22 +27,25 @@ class OBF:
 
         for j in range(0,np.size(g_list)):
              Time=10
+             ntraj=500
              for i in range(0,np.size(E_list)):
                 n=0;
                 Na=int(max(math.ceil(E_list[i]*E_list[i]+6*E_list[i]),4));
                 Nb=int(Na//2);
                 ps.SetParamaters((g_list[j],[Na,Nb,0,0],self.Delta,E_list[i]))
-                (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,self.ntraj,Time,self.Pace)
-                while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])>self.accuracy):
+                (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,ntraj,Time,self.Pace)
+                print(ntraj,Time);
+                while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(P_trans)>self.accuracy):
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     n=n+1;
-                    self.ntraj=self.ntraj*2
+                    ntraj=ntraj*2
                     if(n>3):
                         Time=Time*2;
-                    (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,self.ntraj,Time,self.Pace)
+                    print(ntraj,Time);
+                    (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,ntraj,Time,self.Pace)
                 if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(E_list[i]*E_list[i])<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
-                    Time=Time//2;self.ntraj=self.ntraj//2
+                    Time=Time//2;ntraj=ntraj//2
                 self.Result_out[j][i][0]=P_trans
                 self.Result_out[j][i][1]=output.expect[1][-1]
                 print(P_trans,output.expect[1][-1])
