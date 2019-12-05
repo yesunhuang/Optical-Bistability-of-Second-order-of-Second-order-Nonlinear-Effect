@@ -98,7 +98,7 @@ class OBF:
 
     def ReadData(self,name,group):
         "Read the Data"
-        data=open("data1.dat",'r')
+        data=open(name,'r')
         n=group;i=0;j=0;
         E=[]; g=[];
         Result=[];

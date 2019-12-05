@@ -5,7 +5,8 @@
     <ProjectGuid>b366ce5f-a0e2-4d10-9ac7-184bf898c3b5</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>TestRead.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,9 +27,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProblemSolver.py" />
-    <Compile Include="TestRead.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="HowToUse.md">
