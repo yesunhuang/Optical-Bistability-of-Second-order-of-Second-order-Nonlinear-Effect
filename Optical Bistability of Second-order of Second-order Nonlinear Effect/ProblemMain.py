@@ -91,6 +91,40 @@ class OBF:
             data.write('------------------------------------------------\n')
         data.close()
 
+    def ReadData(self,name,group):
+        "Read the Data"
+        data=open(name,'r')
+        n=group;i=0;j=0;
+        E=[]; g=[];
+        Result=[];
+        first=True;
+        dataOrigin=data.readlines()
+        for dataL in dataOrigin:
+             if(dataL[1]=='-'):
+                 n=n-1;
+                 continue;
+             if(n<1):
+                 break;
+             dataS=dataL.split(' ')
+             if (len(dataS)==1):
+                 g.append(float(dataS[0][0:-1]))
+                 i=i+1;
+                 if (i==2):
+                     first=False;
+             else:
+                 if (first==True):
+                     j=j+1
+                     E.append(float(dataS[0]))
+                 Result.append(float(dataS[1]))
+                 Result.append(float(dataS[2][0:-1]))
+        E_array=np.asarray(E)
+        g_array=np.asarray(g)
+        self.Result_out=np.asarray(Result)
+        self.Result_out=self.Result_out.reshape(i,j,2)
+        self.PlotResult(False,E_array,g_array)
+        data.close()
+        return (E_array,g_array)
+
     def randomcolor(self):
         "Creat random color"
         colorArr = ['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
