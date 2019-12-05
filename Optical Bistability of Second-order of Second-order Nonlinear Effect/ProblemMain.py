@@ -96,6 +96,46 @@ class OBF:
             data.write('------------------------------------------------\n')
         data.close()
 
+    def ReadData(self,name,group):
+        "Read the Data"
+        data=open("data1.dat",'r')
+        n=group;i=0;j=0;
+        E=[]; g=[];
+        Result=[];
+        first=True;
+        dataOrigin=data.readlines()
+        for dataL in dataOrigin:
+             if(dataL[1]=='-'):
+                 n=n-1;
+                 continue;
+             if(n<1):
+                 break;
+             dataS=dataL.split(' ')
+             if (len(dataS)==1):
+                 g.append(float(dataS[0][0:-1]))
+                 i=i+1;
+                 if (i==2):
+                     first=False;
+             else:
+                 if (first==True):
+                     j=j+1
+                     E.append(float(dataS[0]))
+                 Result.append(float(dataS[1]))
+                 Result.append(float(dataS[2][0:-1]))
+        E_array=np.asarray(E)
+        g_array=np.asarray(g)
+        self.Result_out=np.asarray(Result)
+        self.Result_out=self.Result_out.reshape(i,j,2)
+        self.Result_out_m=np.zeros([i,j,2])
+        ps=ProblemSolver((self.g,[6,3,1,1],self.Delta,0.333))
+        for j in range(0,np.size(g_array)):
+            for i in range(0,np.size(E_array)):
+                ps.SetParamaters((g_array[j],[6,3,0,0],self.Delta,E_array[i]))
+                (self.Result_out_m[j][i][0],self.Result_out_m[j][i][1])=ps.MeanFeildCalculator();
+        self.PlotResult(False,E_array,g_array)
+        data.close()
+        return (E_array,g_array)
+
     def randomcolor(self):
         "get random color"
         colorArr = ['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
