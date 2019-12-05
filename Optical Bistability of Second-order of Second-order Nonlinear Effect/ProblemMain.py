@@ -121,6 +121,12 @@ class OBF:
         g_array=np.asarray(g)
         self.Result_out=np.asarray(Result)
         self.Result_out=self.Result_out.reshape(i,j,2)
+        self.Result_out_m=np.zeros([i,j,2])
+        ps=ProblemSolver((self.g,[6,3,1,1],self.Delta,0.333))
+        for j in range(0,np.size(g_array)):
+            for i in range(0,np.size(E_array)):
+                ps.SetParamaters((g_array[j],[6,3,0,0],self.Delta,E_array[i]))
+                (self.Result_out_m[j][i][0],self.Result_out_m[j][i][1])=ps.MeanFeildCalculator();
         self.PlotResult(False,E_array,g_array)
         data.close()
         return (E_array,g_array)
