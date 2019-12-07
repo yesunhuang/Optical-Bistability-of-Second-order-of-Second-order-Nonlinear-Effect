@@ -9,7 +9,7 @@ class OBF:
         "Initial the setting"
         self.g=0.333
         self.Delta=np.asarray([0.8, 1.6])
-        self.accuracy=0.01
+        self.accuracy=0.001
         self.Pace=0.001
         self.rtol=1e-10
         self.atol=1e-13
@@ -35,6 +35,8 @@ class OBF:
                 ps.SetParamaters((g_list[j],[Na,Nb,0,0],self.Delta,E_list[i]))
                 (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,ntraj,Time,self.Pace)
                 print(ntraj,Time);
+
+                """
                 while (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(P_trans)>self.accuracy):
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     n=n+1;
@@ -46,6 +48,8 @@ class OBF:
                 if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(P_trans)<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2;ntraj=ntraj//2
+                """
+
                 self.Result_out[j][i][0]=P_trans
                 self.Result_out[j][i][1]=output.expect[1][-1]
                 print(P_trans,output.expect[1][-1])
@@ -66,8 +70,9 @@ class OBF:
                 axes[0].plot(E*E,self.Result_out_m[j,...,0],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
                 axes[1].plot(E*E,self.Result_out_m[j,...,1],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
         else:
-            axes[0].set_xlim(g[0]*g[0],g[-1]*g[-1]);axes[1].set_xlim(g[0]*g[0],g[-1]*g[-1]);
+            axes[0].set_xlim(g[0],g[-1]);axes[1].set_xlim(g[0],g[-1]);
             for j in range(0,np.size(E)):
+                cor=self.randomcolor()
                 axes[0].plot(g,self.Result_out[...,j,0],color=cor,linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
                 axes[1].plot(g,self.Result_out[...,j,1],color=cor,linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
                 axes[0].plot(g,self.Result_out_m[...,j,0],color=cor,linestyle='--',label='M:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
