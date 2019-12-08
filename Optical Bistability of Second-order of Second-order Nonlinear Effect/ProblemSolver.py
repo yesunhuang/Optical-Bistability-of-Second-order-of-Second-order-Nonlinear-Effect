@@ -1,7 +1,8 @@
 from qutip import *
 from scipy import *
 import numpy as np
-
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 class ProblemSolver:
     'The Problem Solver'
@@ -52,6 +53,25 @@ class ProblemSolver:
             P_in=self.E*self.E
         Output_rate=P_trans/P_in
         return(output,P_trans,Output_rate)
+    
+    def PlotPhotonOccupation(self,rho_ss,N):
+        "Plot the photon occupation of the steady state"
+        fig, axes = plt.subplots(1, 2, figsize=(18,6))
+        rho_a=ptrace(rho_ss, 0)
+        rho_b=ptrace(rho_ss,1)
+        axes[0].bar(arange(0, N), real(rho_a.diag()), color="blue", alpha=0.6)
+        axes[0].set_ylim(0, 1)
+        axes[0].set_xlim(0, N)
+        axes[0].set_xlabel('Fock number', fontsize=18)
+        axes[0].set_ylabel('Occupation probability of mode a', fontsize=18);
+
+        axes[1].bar(arange(0, N//2), real(rho_b.diag()), color="blue", alpha=0.6)
+        axes[1].set_ylim(0, 1)
+        axes[1].set_xlim(0, N)
+        axes[1].set_xlabel('Fock number', fontsize=18)
+        axes[1].set_ylabel('Occupation probability of mode b', fontsize=18);
+
+        plt.show()
 
 #from ProblemSolver import *
 #Paramaters= (0.333, [10,10,2,1], [0.8, 1.6], 0.106)
