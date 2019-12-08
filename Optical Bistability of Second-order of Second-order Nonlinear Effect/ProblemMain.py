@@ -71,8 +71,8 @@ class OBF:
             axes[0].set_xlim(g[0],g[-1]);axes[1].set_xlim(g[0],g[-1]);
             for j in range(0,np.size(E)):
                 cor=self.randomcolor()
-                axes[0].plot(g,self.Result_out[...,j,0],color=cor,linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[0]*E[0],2)))
-                axes[1].plot(g,self.Result_out[...,j,1],color=cor,linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[0]*E[0],2)))
+                axes[0].plot(g,self.Result_out[...,j,0],color=cor,linestyle='-',label='Q:'+r"$E^2= $"+str(round(E[j]*E[j],2)))
+                axes[1].plot(g,self.Result_out[...,j,1],color=cor,linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[j]*E[j],2)))
             axes[0].set_xlabel('g');axes[1].set_xlabel('g')
         axes[0].legend(loc=0); axes[1].legend(loc=0);
         axes[0].set_ylabel('Correlation '+r'$g_{2}$')
