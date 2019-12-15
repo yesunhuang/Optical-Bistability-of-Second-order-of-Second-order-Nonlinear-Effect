@@ -31,11 +31,13 @@ class OBF:
         axes.set_xlim(0, Time);axes.legend(loc=0)
         axes.set_xlabel('Time');axes.set_ylabel('Photons Numbers')
         plt.show()
+
     def PlotRelation(self,E,g,Option=False):
         "The main function"
         E_list=E;g_list=g;
         self.Result_out=np.zeros([size(g_list),np.size(E_list),2])
         self.Result_out_m=np.zeros([size(g_list),np.size(E_list),2])
+        self.Result_out_c=np.zeros([size(g_list),np.size(E_list),2])
         ps=ProblemSolver((self.g,[6,3,1,1],self.Delta,0.333))
 
         for j in range(0,np.size(g_list)):
@@ -49,6 +51,7 @@ class OBF:
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time*2
                     (output,P_trans,rate)=ps.AdvanceCalculator(self.rtol,self.atol,Time,self.Pace)
+                (self.Result_out_c[j][i][0],self.Result_out_c[j][i][1])=ps.ClusterCalculator(Time,self.Pace);
                 if (math.fabs((output.expect[0][int(-0.1//self.Pace)]-P_trans))/(P_trans)<(self.accuracy/100)) and (Time>2) :
                     #print(Time,output.expect[0][int(-0.1//self.Pace)],P_trans)
                     Time=Time//2
@@ -70,6 +73,8 @@ class OBF:
                 axes[1].plot(E*E,self.Result_out[j,...,1],color=cor,linestyle='-',label='Q:g='+str(round(g[j],2)))
                 axes[0].plot(E*E,self.Result_out_m[j,...,0],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
                 axes[1].plot(E*E,self.Result_out_m[j,...,1],color=cor,linestyle='--',label='M:g='+str(round(g[j],2)))
+                axes[0].plot(E*E,self.Result_out_c[j,...,0],color=cor,linestyle='-.',label='C:g='+str(round(g[j],2)))
+                axes[1].plot(E*E,self.Result_out_c[j,...,1],color=cor,linestyle='-.',label='C:g='+str(round(g[j],2)))
         else:
             axes[0].set_xlim(g[0],g[-1]);axes[1].set_xlim(g[0],g[-1]);
             for j in range(0,np.size(E)):
@@ -78,6 +83,8 @@ class OBF:
                 axes[1].plot(g,self.Result_out[...,j,1],color=cor,linestyle='-',label='Q:'+ r"$E^2= $"+str(round(E[j]*E[j],2)))
                 axes[0].plot(g,self.Result_out_m[...,j,0],color=cor,linestyle='--',label='M:'+r"$E^2= $"+str(round(E[j]*E[j],2)))
                 axes[1].plot(g,self.Result_out_m[...,j,1],color=cor,linestyle='--',label='M:'+ r"$E^2= $"+str(round(E[j]*E[j],2)))
+                axes[0].plot(g,self.Result_out_c[...,j,0],color=cor,linestyle='-.',label='C:'+r"$E^2= $"+str(round(E[j]*E[j],2)))
+                axes[1].plot(g,self.Result_out_c[...,j,1],color=cor,linestyle='-.',label='C:'+ r"$E^2= $"+str(round(E[j]*E[j],2)))
             axes[0].set_xlabel('g');axes[1].set_xlabel('g')
         axes[0].legend(loc=0); axes[1].legend(loc=0);
         axes[0].set_ylabel(r'$<a^{\dagger}a>$')
